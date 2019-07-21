@@ -125,7 +125,6 @@ export class MinecraftService {
 
             const ipAddress = await this.instanceService.getPublicIPAddress(server.instanceId);
             const players = await this.getOnlinePlayers(ipAddress);
-            console.log("Server pinged with " + players + " players.");
             if (players === 0) {
                 server.noPlayersFor += PING_INTERVAL;
                 console.log("No players on " + server.name + " for " + server.noPlayersFor + " seconds.");
