@@ -156,7 +156,7 @@ const main = async () => {
                 const duration = (currentTime.getTime() - launchTime.getTime()) / 1000;
                 const cost = await instanceService.getSessionPrice(instanceId, duration);
                 await instanceService.stopInstance(instanceId);
-                await m.edit(`Minecraft server ${args[1]} has been shut down. This current session cost $${cost.toFixed(2)}.`);
+                await m.edit(`Minecraft server ${args[1]} has been shut down. This current session cost $${cost.toFixed(5)}.`);
             } catch (e) {
                 console.log(e);
                 await message.channel.send("Fatal error occurred during shut down, <@179957985253130240>");
@@ -186,7 +186,7 @@ const main = async () => {
                     statusText += "IP Address (only use as backup): " + status.ipAddress + "\n";
                     statusText += "Hostname: " + status.hostname + "\n";
                     statusText += "Players online: " + status.players + "\n";
-                    statusText += "Session cost: $" + cost.toFixed(2);
+                    statusText += "Session cost: $" + cost.toFixed(5);
                 } else {
                     statusText += "Server is currently offline";
                 }
