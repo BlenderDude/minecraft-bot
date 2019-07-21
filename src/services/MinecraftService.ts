@@ -124,6 +124,11 @@ export class MinecraftService {
             }
 
             const ipAddress = await this.instanceService.getPublicIPAddress(server.instanceId);
+            const active = await this.isServerActive(ipAddress);
+            if (!active) {
+                server.noPlayersFor = 0;
+                return;
+            }
             const players = await this.getOnlinePlayers(ipAddress);
             if (players === 0) {
                 server.noPlayersFor += PING_INTERVAL;
