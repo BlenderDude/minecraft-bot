@@ -1,5 +1,6 @@
 import * as AWS from "aws-sdk";
 import { Service } from "typedi";
+import { BASE_HOSTNAME } from "../index";
 
 @Service()
 export class DNSService {
@@ -12,7 +13,7 @@ export class DNSService {
                     {
                         Action: "UPSERT",
                         ResourceRecordSet: {
-                            Name: recordSet + ".tuttiapp.net",
+                            Name: recordSet + BASE_HOSTNAME,
                             Type: "A",
                             ResourceRecords: [
                                 {
@@ -24,7 +25,7 @@ export class DNSService {
                     },
                 ],
             },
-            HostedZoneId: "Z1V2E7XVF7XEM8",
+            HostedZoneId: process.env.HOSTED_ZONE_ID!,
         }).promise();
     }
 }

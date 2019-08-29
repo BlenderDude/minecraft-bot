@@ -1,5 +1,6 @@
 import Gamedig from "gamedig";
 import { Inject, Service } from "typedi";
+import { BASE_HOSTNAME } from "../index";
 import { InstanceService } from "./InstanceService";
 
 export interface IMinecraftServer {
@@ -88,7 +89,7 @@ export class MinecraftService {
             };
         }
 
-        const hostname = server.recordSet + ".tuttiapp.net";
+        const hostname = server.recordSet + BASE_HOSTNAME;
         const players = await this.getOnlinePlayers(ipAddress);
 
         return {

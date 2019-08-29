@@ -6,6 +6,8 @@ import { DNSService } from "./services/DNSService";
 import { InstanceService } from "./services/InstanceService";
 import { MinecraftService } from "./services/MinecraftService";
 
+export const BASE_HOSTNAME = process.env.BASE_HOSTNAME!;
+
 const main = async () => {
     const discordService = Container.get(DiscordService);
     const instanceService = Container.get(InstanceService);
@@ -14,13 +16,14 @@ const main = async () => {
 
     minecraftService.registerServer({
         name: "vanilla",
-        instanceId: "i-0797e181a1afacb5a",
-        recordSet: "vanilla.mc",
+        instanceId: process.env.VANILLA_INSTANCE_ID!,
+        recordSet: process.env.VANILLA_RECORD_SET!,
     });
 
-    // Login to the discord api
+    // Login to the Discord api
     await discordService.login();
 
+    // Register the base command
     discordService.registerCommand({
         args: [],
         description: "",
@@ -30,7 +33,7 @@ const main = async () => {
         },
     });
 
-    // Help
+    // Help command
     discordService.registerCommand({
         args: ["help"],
         description: "Lists the command page",
@@ -51,6 +54,7 @@ const main = async () => {
         },
     });
 
+    // Server list command
     discordService.registerCommand({
         args: ["servers"],
         description: "Displays a list of all servers available to run",
@@ -65,6 +69,7 @@ const main = async () => {
         },
     });
 
+    // Start command helper
     discordService.registerCommand({
         args: ["start"],
         showInHelp: false,
@@ -74,6 +79,7 @@ const main = async () => {
         },
     });
 
+    // Start command
     discordService.registerCommand({
         args: ["start", "*"],
         description: "Start a specific Minecraft server",
@@ -97,16 +103,16 @@ const main = async () => {
 
                 const m = (await message.channel.send(
                     `Server booting up. Use the hostname \`${recordSet +
-                        ".tuttiapp.net"}\` in Minecraft. It should be updated in 10 seconds.`,
+                        BASE_HOSTNAME}\` in Minecraft. It should be updated in 10 seconds.`,
                 )) as Discord.Message;
 
                 await instanceService.startInstance(instanceId);
                 await instanceService.waitForRunningInstance(instanceId, 20000);
                 const ipAddress = await instanceService.waitForPublicIp(instanceId, 10000);
-                await m.edit(`Instance booted, awaiting Minecraft server launch. \`${recordSet + ".tuttiapp.net"}\` or \`${ipAddress}\``);
+                await m.edit(`Instance booted, awaiting Minecraft server launch. \`${recordSet + BASE_HOSTNAME}\` or \`${ipAddress}\``);
                 await dnsService.updateRecordSet(recordSet, ipAddress);
                 await minecraftService.waitForActiveServer(ipAddress, 60000);
-                await m.edit(`Minecraft server online at \`${recordSet + ".tuttiapp.net"}\` or \`${ipAddress}\``);
+                await m.edit(`Minecraft server online at \`${recordSet + BASE_HOSTNAME}\` or \`${ipAddress}\``);
             } catch (e) {
                 await message.channel.send("Fatal error occurred during bootup, <@179957985253130240>");
                 await message.channel.send(JSON.stringify(e, null, 2));
@@ -114,6 +120,7 @@ const main = async () => {
         },
     });
 
+    // Stop command helper
     discordService.registerCommand({
         args: ["stop"],
         showInHelp: false,
@@ -123,6 +130,7 @@ const main = async () => {
         },
     });
 
+    // Stop command (if not stopped automatically)
     discordService.registerCommand({
         args: ["stop", "*"],
         description: "Stop a specific Minecraft server",
@@ -164,6 +172,7 @@ const main = async () => {
         },
     });
 
+    // Status command
     discordService.registerCommand({
         args: ["status"],
         showInHelp: false,
@@ -198,4 +207,5 @@ const main = async () => {
     });
 };
 
+// Run
 main();
