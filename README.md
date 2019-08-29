@@ -32,5 +32,6 @@ In order to run, there must be a few variables set in the `.env` file.
 -   `BASE_HOSTNAME`: The base hostname for that zone
 -   `VANILLA_INSTANCE_ID`: The instance id for the vanilla server
 -   `VANILLA_RECORD_SET`: The record set for the server. This will be prepended to the `BASE_HOSTNAME`
+-   `DISCORD_TOKEN`: The Discord API Token
 
 AWS credentials must also be found in the environment. You can read about what you need to apply [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-envvars.html)
