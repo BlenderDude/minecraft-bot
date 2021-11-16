@@ -5,7 +5,7 @@
     "license": "MIT",
     "dependencies": {
         "@types/gamedig": "^1.0.0",
-        "aws-sdk": "^2.481.0",
+        "aws-sdk": "^2.814.0",
         "discord.js": "^11.5.1",
         "gamedig": "^2.0.14",
         "reflect-metadata": "^0.1.13",
